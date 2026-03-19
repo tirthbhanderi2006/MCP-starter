@@ -1,0 +1,4 @@
+llama-index==0.10.25
+openai
+python-dotenv==1.0.1
+pypdf==4.1.0
