@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend.Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      # Use python unbuffered output for standard logging
+      - PYTHONUNBUFFERED=1
+      - DOCKER_BUILDKIT=1
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket; socket.create_connection(('localhost', 8000), timeout=2)"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend.Dockerfile
+    ports:
+      - "8501:8501"
+    depends_on:
+      backend:
+        condition: service_healthy
+    environment:
+      # Route MCP traffic to the internal networking name of the backend container
+      - MCP_SERVER_URL=http://backend:8000/sse
+      - PYTHONUNBUFFERED=1
+      - DOCKER_BUILDKIT=1
+    # Share `.env` variables (e.g., GROQ_API_KEY) with the frontend container
+    env_file:
+      - .env

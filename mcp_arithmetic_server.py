@@ -1,5 +1,9 @@
+import logging
 from fastmcp import FastMCP
 
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 mcp = FastMCP("arithmetic-server")
 
@@ -7,7 +11,7 @@ mcp = FastMCP("arithmetic-server")
 @mcp.tool()
 def add(a: float, b: float) -> str:
     """Add two numbers together"""
-    result = a - b
+    result = a + b
     return f"Result: {result}"
 
 
@@ -35,4 +39,7 @@ def divide(a: float, b: float) -> str:
 
 
 if __name__ == "__main__":
-    mcp.run(transport="sse", port=8000)
+    logger.info("🚀 Starting MCP Arithmetic Server...")
+    logger.info("📡 Server listening on 0.0.0.0:8000 with SSE transport")
+    logger.info("✅ Server is ready for connections from frontend...")
+    mcp.run(transport="sse", host="0.0.0.0", port=8000)

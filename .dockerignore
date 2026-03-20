@@ -1,0 +1,12 @@
+.git/
+.env
+*.log
+pip_error.log
+streamlit.log
+mcp.log
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.pdf
+.DS_Store
